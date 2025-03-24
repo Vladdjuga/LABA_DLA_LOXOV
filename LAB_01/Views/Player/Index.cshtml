@@ -1,0 +1,49 @@
+﻿@model List<LAB02_DLL.Models.Player>
+
+<h2 class="text-center my-4">Player List</h2>
+
+<div class="container">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Country</th>
+                <th>Birth Date</th>
+                <th>Team</th>
+                <th>Positions</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model)
+            {
+                <tr>
+                    <td>@player.Id</td>
+                    <td>@player.FirstName</td>
+                    <td>@player.LastName</td>
+                    <td>@player.Country</td>
+                    <td>@player.BirthDate.ToString("yyyy-MM-dd")</td>
+                    <td>@player.Team?.Name</td>
+                    <td>
+                        @foreach (var position in player.Positions)
+                        {
+                            <span>@position.Name</span>
+
+                            <br />
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new {@player.Id})
+                        @Html.ActionLink("Remove", "Remove",new{ @player.Id})
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex justify-content-center mt-4">
+    <a role="button" class="btn btn-primary" asp-action="AddSubmitForm">Add New Player</a>
+</div>

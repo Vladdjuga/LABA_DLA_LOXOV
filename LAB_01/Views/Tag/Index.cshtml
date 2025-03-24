@@ -1,0 +1,7 @@
+﻿@model List<LAB02_DLL.Models.Tag>
+
+@foreach (var e in Model)
+{
+    <p>@e.Id @e.Name @Html.ActionLink("Edit", "Edit", new {@e.Id}) @Html.ActionLink("Delete", "Delete", new {@e.Id})</p>
+}
+@Html.ActionLink("Add","Add")

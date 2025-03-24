@@ -1,0 +1,7 @@
+﻿@model LAB02_DLL.Models.Tag
+
+<form asp-action="Submit" method="post" novalidate>
+    <input name="Id" value="@Model.Id" hidden/>
+    <input type="text" value="@Model.Name" name="Name"/>
+    <button type="submit">Submit</button>
+</form>

@@ -1,0 +1,37 @@
+﻿@using LAB02_DLL.Models
+@model LAB02_DLL.Models.Article
+
+<form asp-action="Submit" method="post" novalidate="true">
+    <input name="Id" value="@Model.Id" hidden/>
+    <br/>
+    <input type="text" value="@Model.Title" name="Title" />
+    <br />
+    <input type="text" value="@Model.Lead" name="Lead" />
+    <br />
+    <input type="text" value="@Model.Content" name="Content" />
+    <br />
+    <input type="date" value="@Model.CreationDate" name="CreationDate" />
+    <br />
+    <select name="AuthorId">
+        @foreach (Author o in ViewBag.Authors)
+        {
+            <option value="@o.Id">@o.FirstName @o.LastName</option>
+        }
+    </select>
+    <br />
+    <select name="CategoryId">
+        @foreach (Category o in ViewBag.Categories)
+        {
+            <option value="@o.Id">@o.Name</option>
+        }
+    </select>
+    <br />
+    <select name="MatchId">
+        @foreach (Match o in ViewBag.Matches)
+        {
+            <option value="@o.Id">@o.Id</option>
+        }
+    </select>
+    <br />
+    <button type="submit">Submit</button>
+</form>
