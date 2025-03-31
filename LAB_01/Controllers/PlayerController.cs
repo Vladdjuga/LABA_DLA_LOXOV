@@ -22,34 +22,19 @@ namespace LAB_01.Controllers
         public IActionResult AddSubmitForm()
         {
             Player p = new Player();
+            p.BirthDate= System.DateTime.Now;
             ViewBag.Teams = _dbContext.Teams.ToList();
             ViewBag.Positions = _dbContext.Positions.ToList();
             return View("SubmitForm", p);
         }
 
-        public async Task<IActionResult> Submit(Player player, int[] Positions)
+        public async Task<IActionResult> Submit(Player player, int[] positions)
         {
-            if (player.Id == 0)
-            {
-                player.Positions = _dbContext.Positions.Where(p => Positions.Contains(p.Id)).ToList();
-                _dbContext.Add(player);
-                await _dbContext.SaveChangesAsync();
-            }
-            else
-            {
-                var p = await _dbContext.Players.FirstOrDefaultAsync(el => el.Id == player.Id);
-                if (p == null)
-                    return RedirectToAction("Index");
-
-                p.FirstName = player.FirstName;
-                p.LastName = player.LastName;
-                p.Country = player.Country;
-                p.BirthDate = player.BirthDate;
-                p.TeamId = player.TeamId;
-                p.Positions = player.Positions;
-                _dbContext.Update(p);
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.Attach(player).State = player.Id == 0 ? EntityState.Added : EntityState.Modified;
+            player.Positions = await _dbContext.Positions
+                .Where(p => positions.Contains(p.Id))
+                .ToListAsync();
+            await _dbContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -64,14 +49,14 @@ namespace LAB_01.Controllers
             return View("SubmitForm", p);
         }
 
-        public async Task<IActionResult> Remove(int id)
+        public IActionResult Remove(int id)
         {
-            Player? p = await _dbContext.Players
-                .FirstOrDefaultAsync(el => el.Id == id);
+            Player? p = _dbContext.Players
+                .FirstOrDefault(el => el.Id == id);
             if (p == null)
                 return RedirectToAction("Index");
             _dbContext.Players.Remove(p);
-            _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
             return RedirectToAction("Index");
         }
     }

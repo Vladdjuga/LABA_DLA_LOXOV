@@ -26,6 +26,8 @@ namespace LAB02_DLL.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MatchPlayer>()
+                .HasKey(p => new { p.Id, p.PlayerId });
             modelBuilder.Entity<Match>()
                         .HasOne(m => m.HomeTeam)
                         .WithMany(t => t.HomeMatches)

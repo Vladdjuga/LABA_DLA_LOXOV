@@ -1,0 +1,9 @@
+﻿@model List<LAB02_DLL.Models.Category>
+
+@foreach (var item in Model)
+{
+    <p>
+        @item.Id @item.Name @Html.ActionLink("Edit", "Edit", new { @item.Id }) @Html.ActionLink("Delete", "Delete", new { @item.Id })
+    </p>
+}
+<a asp-action="Add">Add</a>

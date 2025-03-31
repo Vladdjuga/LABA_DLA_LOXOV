@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LAB02_DLL.Migrations
 {
     [DbContext(typeof(FootballDbContext))]
-    [Migration("20250324211555_Nully")]
-    partial class Nully
+    [Migration("20250327155351_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -235,6 +235,9 @@ namespace LAB02_DLL.Migrations
                     b.Property<int?>("MatchPlayerId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("MatchPlayerPlayerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Minute")
                         .HasColumnType("int");
 
@@ -244,7 +247,7 @@ namespace LAB02_DLL.Migrations
 
                     b.HasIndex("MatchId");
 
-                    b.HasIndex("MatchPlayerId");
+                    b.HasIndex("MatchPlayerId", "MatchPlayerPlayerId");
 
                     b.ToTable("MatchEvents");
                 });
@@ -252,18 +255,15 @@ namespace LAB02_DLL.Migrations
             modelBuilder.Entity("LAB02_DLL.Models.MatchPlayer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("MatchId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PlayerId")
                         .HasColumnType("int");
 
                     b.Property<int>("PositionId")
@@ -272,7 +272,7 @@ namespace LAB02_DLL.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "PlayerId");
 
                     b.HasIndex("MatchId");
 
@@ -477,7 +477,7 @@ namespace LAB02_DLL.Migrations
 
                     b.HasOne("LAB02_DLL.Models.MatchPlayer", "MatchPlayer")
                         .WithMany("MatchEvents")
-                        .HasForeignKey("MatchPlayerId");
+                        .HasForeignKey("MatchPlayerId", "MatchPlayerPlayerId");
 
                     b.Navigation("EventType");
 
@@ -494,7 +494,9 @@ namespace LAB02_DLL.Migrations
 
                     b.HasOne("LAB02_DLL.Models.Player", "Player")
                         .WithMany("MatchPlayers")
-                        .HasForeignKey("PlayerId");
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LAB02_DLL.Models.Position", "Position")
                         .WithMany("MatchPlayers")

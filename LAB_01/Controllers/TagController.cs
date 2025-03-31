@@ -16,7 +16,6 @@ namespace LAB_01.Controllers
         public IActionResult Add()
         {
             Tag tag = new Tag();
-            tag.Id = 0;
             return View("SubmitForm", tag);
         }
 
@@ -40,21 +39,9 @@ namespace LAB_01.Controllers
 
         public IActionResult Submit(Tag tag)
         {
-            if (tag.Id == 0)
-            {
-                _dbContext.Tags.Add(tag);
-                _dbContext.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                var t = _dbContext.Tags.FirstOrDefault(el => el.Id == tag.Id);
-                if (t == null)
-                    return RedirectToAction("Index");
-                t.Name = tag.Name;
-                _dbContext.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+            _dbContext.Attach(tag).State=tag.Id==0?EntityState.Added:EntityState.Modified;
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

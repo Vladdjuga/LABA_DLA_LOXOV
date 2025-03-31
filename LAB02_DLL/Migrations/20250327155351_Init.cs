@@ -102,7 +102,7 @@ namespace LAB02_DLL.Migrations
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FoundingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LeagueId = table.Column<int>(type: "int", nullable: false)
+                    LeagueId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -111,8 +111,7 @@ namespace LAB02_DLL.Migrations
                         name: "FK_Teams_Leagues_LeagueId",
                         column: x => x.LeagueId,
                         principalTable: "Leagues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -123,8 +122,8 @@ namespace LAB02_DLL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Stadium = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HomeTeamId = table.Column<int>(type: "int", nullable: false),
-                    AwayTeamId = table.Column<int>(type: "int", nullable: false)
+                    HomeTeamId = table.Column<int>(type: "int", nullable: true),
+                    AwayTeamId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,8 +172,8 @@ namespace LAB02_DLL.Migrations
                     Lead = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
                     MatchId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -189,8 +188,7 @@ namespace LAB02_DLL.Migrations
                         name: "FK_Articles_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Articles_Matches_MatchId",
                         column: x => x.MatchId,
@@ -202,23 +200,21 @@ namespace LAB02_DLL.Migrations
                 name: "MatchPlayers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MatchId = table.Column<int>(type: "int", nullable: false),
-                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    MatchId = table.Column<int>(type: "int", nullable: true),
                     PositionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MatchPlayers", x => x.Id);
+                    table.PrimaryKey("PK_MatchPlayers", x => new { x.Id, x.PlayerId });
                     table.ForeignKey(
                         name: "FK_MatchPlayers_Matches_MatchId",
                         column: x => x.MatchId,
                         principalTable: "Matches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_MatchPlayers_Players_PlayerId",
                         column: x => x.PlayerId,
@@ -309,9 +305,10 @@ namespace LAB02_DLL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Minute = table.Column<int>(type: "int", nullable: false),
-                    MatchId = table.Column<int>(type: "int", nullable: false),
+                    MatchId = table.Column<int>(type: "int", nullable: true),
                     EventTypeId = table.Column<int>(type: "int", nullable: false),
-                    MatchPlayerId = table.Column<int>(type: "int", nullable: true)
+                    MatchPlayerId = table.Column<int>(type: "int", nullable: true),
+                    MatchPlayerPlayerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -323,16 +320,15 @@ namespace LAB02_DLL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MatchEvents_MatchPlayers_MatchPlayerId",
-                        column: x => x.MatchPlayerId,
+                        name: "FK_MatchEvents_MatchPlayers_MatchPlayerId_MatchPlayerPlayerId",
+                        columns: x => new { x.MatchPlayerId, x.MatchPlayerPlayerId },
                         principalTable: "MatchPlayers",
-                        principalColumn: "Id");
+                        principalColumns: new[] { "Id", "PlayerId" });
                     table.ForeignKey(
                         name: "FK_MatchEvents_Matches_MatchId",
                         column: x => x.MatchId,
                         principalTable: "Matches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -381,9 +377,9 @@ namespace LAB02_DLL.Migrations
                 column: "MatchId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatchEvents_MatchPlayerId",
+                name: "IX_MatchEvents_MatchPlayerId_MatchPlayerPlayerId",
                 table: "MatchEvents",
-                column: "MatchPlayerId");
+                columns: new[] { "MatchPlayerId", "MatchPlayerPlayerId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_MatchPlayers_MatchId",

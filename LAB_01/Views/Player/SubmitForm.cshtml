@@ -39,7 +39,7 @@
 
         <div class="form-group">
             <label for="Positions">Positions</label>
-            <select class="form-control" id="Positions" name="Positions" multiple required>
+            <select class="form-control" id="Positions" name="positions" multiple required>
                 @foreach (var position in ViewBag.Positions as List<LAB02_DLL.Models.Position>)
                 {
                     <option value="@position.Id">@position.Name</option>

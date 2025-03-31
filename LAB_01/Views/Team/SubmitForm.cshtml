@@ -1,11 +1,12 @@
-﻿@model LAB02_DLL.Models.Team
+﻿@using LAB02_DLL.Models
+@model LAB02_DLL.Models.Team
 
 
 <h2 class="text-center my-4">Add New Team</h2>
 
 <div class="container">
-    <form action="Submit" method="post" novalidate>
-        <input hidden value="@Model.Id"/>
+    <form asp-action="Submit" method="post" novalidate>
+        <input hidden value="@Model.Id" name="Id"/>
         <div class="form-group">
             <label for="Name">Team Name</label>
             <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required>
@@ -23,21 +24,20 @@
 
         <div class="form-group">
             <label for="FoundingDate">Founding Date</label>
-            <input type="date" class="form-control" id="FoundingDate" name="FoundingDate" value="@Model.FoundingDate.ToShortDateString()" required>
+            <input type="date" class="form-control" id="FoundingDate" name="FoundingDate" value="@Model.FoundingDate.ToString("yyyy-MM-dd")" required>
         </div>
 
         <div class="form-group">
             <label for="LeagueId">League</label>
             <select class="form-control" id="LeagueId" name="LeagueId" required>
-                <option value="">Select League</option>
-                @foreach (var league in ViewBag.Leagues as List<LAB02_DLL.Models.League>)
+                @foreach (League league in ViewBag.Leagues)
                 {
                     <option value="@league.Id">@league.Name</option>
                 }
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Add Team</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 

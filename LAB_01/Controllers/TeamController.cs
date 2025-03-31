@@ -16,31 +16,43 @@ namespace LAB_01.Controllers
         {
             return View(_dbContext.Teams.Include(t => t.League).ToList());
         }
-        public IActionResult AddSubmitForm()
+        public IActionResult Add()
         {
             Team t = new Team();
+            //t.Id=0;
+            t.FoundingDate= System.DateTime.Now;
             ViewBag.Leagues = _dbContext.Leagues.ToList();
             return View("SubmitForm", t);
         }
+        [HttpPost]
         public IActionResult Submit(Team team)
         {
-            if(team.Id==0)
+            var entry = _dbContext.Entry(team);
+            if (team.Id == 0)
             {
-                _dbContext.Add(team);
-                _dbContext.SaveChangesAsync();
+                entry.State = EntityState.Added;
             }
             else
             {
-                var t = _dbContext.Teams.FirstOrDefault(el => el.Id == team.Id);
-                if(t==null)
-                    return RedirectToAction("Index");
-                t.Name = team.Name;
-                t.Country = team.Country;
-                t.City = team.City;
-                t.FoundingDate = team.FoundingDate;
-                t.LeagueId = team.LeagueId;
-                _dbContext.SaveChangesAsync();
+                entry.State = EntityState.Modified;
             }
+
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        public IActionResult Edit(int id)
+        {
+            Team? t = _dbContext.Teams.FirstOrDefault(e => e.Id == id);
+            if (t == null) return RedirectToAction("Index");
+            ViewBag.Leagues = _dbContext.Leagues.ToList();
+            return View("SubmitForm", t);
+        }
+        public IActionResult Delete(int id)
+        {
+            Team? t = _dbContext.Teams.FirstOrDefault(e => e.Id == id);
+            if (t == null) return RedirectToAction("Index");
+            _dbContext.Remove(t);
+            _dbContext.SaveChanges();
             return RedirectToAction("Index");
         }
     }

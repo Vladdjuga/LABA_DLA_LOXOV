@@ -1,0 +1,7 @@
+﻿@model LAB02_DLL.Models.EventType
+
+<form asp-action="Submit" method="post" novalidate="">
+    <input hidden name="Id" value="@Model.Id"/>
+    <input name="Name" value="@Model.Name"/>
+    <button type="submit">Submit</button>
+</form>

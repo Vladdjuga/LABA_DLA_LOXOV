@@ -15,10 +15,10 @@ namespace LAB02_DLL.Models
         public string Country { get; set; }
         public string City { get; set; }
         public DateTime FoundingDate { get; set; }
-        public League League { get; set; }
+        public League? League { get; set; }
         public int? LeagueId { get; set; }
-        public List<Player> Players { get; set; }
-        public List<Match> HomeMatches { get; set; }
-        public List<Match> AwayMatches { get; set; }
+        public List<Player>? Players { get; set; }
+        public List<Match>? HomeMatches { get; set; }
+        public List<Match>? AwayMatches { get; set; }
     }
 }
