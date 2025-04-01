@@ -8,7 +8,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<FootballDbContext>(c=>c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<FootballDbContext>(c=>
+    c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 
 app.UseHttpsRedirection();

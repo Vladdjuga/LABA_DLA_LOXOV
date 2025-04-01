@@ -15,7 +15,8 @@ namespace LAB02_DLL.Models
         public DateTime BirthDate { get; set; }
         public Team Team { get; set; }
         public int? TeamId { get; set; }
-        public List<Position> Positions { get; set; }
+        public List<Position>? Positions { get; set; }
         public List<MatchPlayer>? MatchPlayers { get; set; }
+        public List<DOTACharacter>? DOTACharacters { get; set; }
     }
 }

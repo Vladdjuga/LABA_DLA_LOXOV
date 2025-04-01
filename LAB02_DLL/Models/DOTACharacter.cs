@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace LAB02_DLL.Models
 {
-    public class Position
+    public class DOTACharacter
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
         public List<Player>? Players { get; set; }
-        public List<MatchPlayer>? MatchPlayers { get; set; }
-        public List<DOTACharacter>? DOTACharacters;
+        public int? PositionId { get; set; }
+        public Position? Position { get; set; }
     }
 }
